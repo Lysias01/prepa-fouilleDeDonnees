@@ -1,0 +1,28 @@
+/* exam */
+.timer {
+  font-family: var(--f-mono);
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+.examsticky {
+  position: sticky;
+  top: calc(env(safe-area-inset-top, 0px) + 92px);
+  z-index: 6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 14px;
+  box-shadow: var(--shadow);
+}
+.hist {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--f-mono);
+  font-size: 0.85rem;
+}

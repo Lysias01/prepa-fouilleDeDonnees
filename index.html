@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Révision Fouille AA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Révision du devoir de fouille de données et apprentissage automatique (Master 1) : fiches, questions de cours, méthodes pas à pas, exercices et examens blancs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Caveat:wght@600&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/views/accueil.css">
+<link rel="stylesheet" href="css/views/fiches.css">
+<link rel="stylesheet" href="css/views/questions.css">
+<link rel="stylesheet" href="css/views/methodes.css">
+<link rel="stylesheet" href="css/views/exercices.css">
+<link rel="stylesheet" href="css/views/examen.css">
+
+<!-- Scripts classiques et non modules ES : le site doit s'ouvrir en double-cliquant sur ce fichier (file://).
+     Ils partagent donc la même portée globale, et l'ordre ci-dessous compte. -->
+<!-- Bloquants : le thème choisi doit être appliqué avant le premier affichage. -->
+<script src="js/core/utils.js"></script>
+<script src="js/core/store.js"></script>
+<script src="js/core/theme.js"></script>
+
+<script defer src="js/ui/components.js"></script>
+<script defer src="js/ui/answer-fields.js"></script>
+
+<script defer src="js/algos/apriori.js"></script>
+<script defer src="js/algos/kmeans.js"></script>
+<script defer src="js/algos/cah.js"></script>
+<script defer src="js/algos/gain.js"></script>
+<script defer src="js/algos/bayes.js"></script>
+
+<script defer src="js/data/chapters.js"></script>
+<script defer src="js/data/cards.js"></script>
+<script defer src="js/data/questions.js"></script>
+<script defer src="js/data/datasets.js"></script>
+<script defer src="js/data/tutos.js"></script>
+<script defer src="js/data/exercices.js"></script>
+<script defer src="js/data/examens.js"></script>
+<script defer src="js/data/pieges.js"></script>
+<script defer src="js/data/plan.js"></script>
+
+<script defer src="js/app/countdown.js"></script>
+<script defer src="js/app/progress.js"></script>
+<script defer src="js/app/router.js"></script>
+
+<script defer src="js/views/accueil.js"></script>
+<script defer src="js/views/fiches.js"></script>
+<script defer src="js/views/questions.js"></script>
+<script defer src="js/views/methodes.js"></script>
+<script defer src="js/views/exercices.js"></script>
+<script defer src="js/views/examen.js"></script>
+<script defer src="js/views/memo.js"></script>
+
+<script defer src="js/app/main.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand-row">
+      <a class="brand" href="#accueil"><b>Fouille·AA</b><span>Révision du devoir · M1</span></a>
+      <div class="right-tools"><span class="countdown" id="cd"></span><button class="iconbtn" id="themeBtn" aria-label="Thème">◐</button></div>
+    </div>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#accueil" data-tab="accueil">Accueil</a>
+      <a href="#fiches" data-tab="fiches">Fiches</a>
+      <a href="#questions" data-tab="questions">Questions</a>
+      <a href="#methodes" data-tab="methodes">Méthodes</a>
+      <a href="#exercices" data-tab="exercices">Exercices</a>
+      <a href="#examen" data-tab="examen">Examen blanc</a>
+      <a href="#memo" data-tab="memo">Mémo</a>
+    </nav>
+  </div>
+</header>
+<main id="main"></main>
+<footer>Contenus tirés des supports de M. Yaya Traoré (IBAM / UJKZ), des TD/TP et des anciens devoirs. Les notions marquées « Hors cours » n’apparaissent pas dans les diapositives. Progression enregistrée uniquement sur cet appareil.</footer>
+</body>
+</html>

@@ -1,0 +1,89 @@
+/* flashcards */
+.flip {
+  perspective: 1400px;
+  min-height: 270px;
+  cursor: pointer;
+}
+.flip-in {
+  position: relative;
+  width: 100%;
+  min-height: 270px;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+}
+.flip.on .flip-in {
+  transform: rotateY(180deg);
+}
+.face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  padding: 26px 26px 26px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  overflow: auto;
+}
+.face::before {
+  content: '';
+  position: absolute;
+  left: 22px;
+  top: 16px;
+  bottom: 16px;
+  width: 2px;
+  background: var(--margin);
+  opacity: 0.5;
+}
+.face.back {
+  transform: rotateY(180deg);
+  background: var(--card);
+}
+.face .term {
+  font-family: var(--f-display);
+  font-size: clamp(1.4rem, 4.5vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.face .def {
+  font-size: 1.08rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .flip-in {
+    transition: none;
+  }
+}
+.deflist {
+  display: flex;
+  flex-direction: column;
+}
+.defitem {
+  display: grid;
+  grid-template-columns: minmax(120px, 220px) minmax(0, 1fr);
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.defitem b {
+  font-family: var(--f-display);
+}
+@media (max-width: 600px) {
+  .defitem {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+.fnav {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.fnav .btn {
+  justify-content: center;
+}

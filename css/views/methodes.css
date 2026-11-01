@@ -1,0 +1,60 @@
+/* stepper */
+.stepper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.dots {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.dots button {
+  width: 26px;
+  height: 8px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--line);
+  cursor: pointer;
+  padding: 0;
+}
+.dots button.on {
+  background: var(--accent);
+}
+.dots button.done {
+  background: color-mix(in srgb, var(--accent) 45%, var(--line));
+}
+.stepnav {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: nowrap;
+  align-items: center;
+  position: sticky;
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 8px;
+  box-shadow: var(--shadow);
+  z-index: 5;
+}
+.steptitle {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.steptitle .n {
+  font-family: var(--f-mono);
+  color: var(--margin);
+  font-weight: 700;
+}
+@media (max-width: 560px) {
+  .stepnav #cnt {
+    font-size: 0.75rem;
+  }
+  .stepnav .btn {
+    padding: 9px 12px;
+  }
+}

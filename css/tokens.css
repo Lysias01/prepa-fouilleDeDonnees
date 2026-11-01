@@ -1,0 +1,84 @@
+/* Layout: cahier Seyès (clair) / tableau noir bleu de la salle (sombre) ; colonne de lecture 880px, onglets collants. */
+:root {
+  --paper: #f5f8fc;
+  --card: #ffffff;
+  --card-2: #eef3fa;
+  --grid: rgba(52, 98, 184, 0.09);
+  --margin: #d94a63;
+  --ink: #18223d;
+  --ink-soft: #56627f;
+  --accent: #2445b5;
+  --accent-ink: #ffffff;
+  --hl: #ffe55c;
+  --hl-ink: #18223d;
+  --ok: #17845a;
+  --ok-bg: #e4f5ec;
+  --ko: #c3354d;
+  --ko-bg: #fbe7ea;
+  --warn: #a86500;
+  --warn-bg: #fff2d9;
+  --line: #d8dfec;
+  --shadow: 0 1px 2px rgba(24, 34, 61, 0.06), 0 8px 24px rgba(24, 34, 61, 0.06);
+  --f-display: 'Bricolage Grotesque', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+  --f-body: 'Atkinson Hyperlegible', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --f-hand: 'Caveat', 'Segoe Print', 'Comic Sans MS', cursive;
+  --f-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --c1: #2f6fe0;
+  --c2: #d9822b;
+  --c3: #1f9d74;
+  --c4: #b04fc4;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --paper: #14273a;
+    --card: #1b3249;
+    --card-2: #203a53;
+    --grid: rgba(255, 255, 255, 0.045);
+    --margin: #ff8d9e;
+    --ink: #edf2f5;
+    --ink-soft: #a8bbca;
+    --accent: #93b9ff;
+    --accent-ink: #0f1f31;
+    --hl: #f2d65f;
+    --hl-ink: #14273a;
+    --ok: #6fd5a1;
+    --ok-bg: rgba(111, 213, 161, 0.13);
+    --ko: #ff8c9c;
+    --ko-bg: rgba(255, 140, 156, 0.13);
+    --warn: #ffc46b;
+    --warn-bg: rgba(255, 196, 107, 0.12);
+    --line: #2c4762;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.25);
+    --c1: #78a7ff;
+    --c2: #ffad5c;
+    --c3: #5fd3a6;
+    --c4: #df8cf0;
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --paper: #14273a;
+  --card: #1b3249;
+  --card-2: #203a53;
+  --grid: rgba(255, 255, 255, 0.045);
+  --margin: #ff8d9e;
+  --ink: #edf2f5;
+  --ink-soft: #a8bbca;
+  --accent: #93b9ff;
+  --accent-ink: #0f1f31;
+  --hl: #f2d65f;
+  --hl-ink: #14273a;
+  --ok: #6fd5a1;
+  --ok-bg: rgba(111, 213, 161, 0.13);
+  --ko: #ff8c9c;
+  --ko-bg: rgba(255, 140, 156, 0.13);
+  --warn: #ffc46b;
+  --warn-bg: rgba(255, 196, 107, 0.12);
+  --line: #2c4762;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --c1: #78a7ff;
+  --c2: #ffad5c;
+  --c3: #5fd3a6;
+  --c4: #df8cf0;
+  color-scheme: dark;
+}

@@ -1,0 +1,105 @@
+/* exercises */
+.exq {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 0;
+  border-top: 1px dashed var(--line);
+}
+.exq:first-of-type {
+  border-top: 0;
+}
+.qhead {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.pts {
+  font-family: var(--f-mono);
+  font-size: 0.8rem;
+  color: var(--margin);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 240px);
+  gap: 10px;
+  align-items: center;
+}
+@media (max-width: 600px) {
+  .field {
+    grid-template-columns: 1fr;
+  }
+}
+.field.good input,
+.field.good select {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+}
+.field.bad input,
+.field.bad select {
+  border-color: var(--ko);
+  background: var(--ko-bg);
+}
+.assign {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+}
+.assign label {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 6px 8px;
+}
+.assign label.good {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+}
+.assign label.bad {
+  border-color: var(--ko);
+  background: var(--ko-bg);
+}
+.assign select {
+  padding: 4px 6px;
+}
+.checks {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.checks label {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.checks label.good {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+}
+.checks label.bad {
+  border-color: var(--ko);
+  background: var(--ko-bg);
+}
+.selfgrade {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.selfgrade .btn {
+  padding: 6px 12px;
+}
+.selfgrade .btn[aria-pressed='true'] {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+}
