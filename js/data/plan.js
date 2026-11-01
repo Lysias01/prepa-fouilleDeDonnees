@@ -1,18 +1,44 @@
-/* ===================== Plan de révision (page d'accueil) ===================== */
-/* [quand, quoi faire, lien] */
-const REVISION_PLAN = [
-  [
-    'Samedi soir / dimanche matin',
-    'Fiches « Intro » et « Règles », puis la méthode Apriori et l’exercice de la bibliothèque.',
-    '#methode-apriori'
-  ],
-  ['Dimanche midi', 'K-means (exercice du 29/10) et CAH, puis les deux exercices d’annales.', '#methode-kmeans'],
-  [
-    'Dimanche après-midi',
-    'Arbre de décision et Naïve Bayes, puis les questions de cours « Tombées en devoir ».',
-    '#methode-gain'
-  ],
-  ['Dimanche soir', 'Examen blanc A en 2 h, corrigé avec le barème.', '#examen-A'],
-  ['Lundi matin', 'Questions « À revoir », puis l’examen blanc B.', '#examen-B'],
-  ['Lundi 17 h', 'Mémo : formules et pièges. Aucune nouvelle notion.', '#memo']
+/* ===================== Parcours de révision (page d'accueil) ===================== */
+/* Chaque étape avance toute seule : count et total disent où en est l'étudiant. */
+const REVISION_PATH = [
+  {
+    title: 'Apprendre les définitions',
+    desc: 'Retourne les fiches, une par une.',
+    href: '#fiches',
+    cta: 'Continuer les fiches',
+    count: () => Object.keys(store.data.seenCards).length,
+    total: () => CARDS.length
+  },
+  {
+    title: 'Comprendre les méthodes',
+    desc: 'Apriori, K-means, CAH, gain, Bayes : suis chaque méthode jusqu’à la dernière étape.',
+    href: '#methodes',
+    cta: 'Continuer les méthodes',
+    count: () => Object.keys(store.data.tutos).length,
+    total: () => TUTOS.length
+  },
+  {
+    title: 'Répondre aux questions de cours',
+    desc: 'QCM et réponses rédigées, dont celles déjà tombées en devoir.',
+    href: '#questions',
+    cta: 'Continuer les questions',
+    count: () => Object.keys(store.data.q).length,
+    total: () => QUESTIONS.length
+  },
+  {
+    title: 'S’entraîner sur les exercices',
+    desc: 'Réponds, vérifie, puis lis la correction détaillée.',
+    href: '#exercices',
+    cta: 'Continuer les exercices',
+    count: () => Object.keys(store.data.ex).length,
+    total: () => EXOS.length
+  },
+  {
+    title: 'Passer les simulations de devoir',
+    desc: 'En temps réel, sans document ni calculatrice, notées sur 20.',
+    href: '#examen',
+    cta: 'Passer une simulation',
+    count: () => Math.min(store.data.exams.length, EXAMS.length),
+    total: () => EXAMS.length
+  }
 ];

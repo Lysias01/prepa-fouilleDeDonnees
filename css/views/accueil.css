@@ -1,68 +1,192 @@
-/* home */
 .hero {
   display: grid;
-  gap: 18px;
-  grid-template-columns: 1.3fr 1fr;
+  gap: 16px;
+  grid-template-columns: 1.55fr 1fr;
   align-items: stretch;
 }
-@media (max-width: 760px) {
+@media (max-width: 820px) {
   .hero {
     grid-template-columns: 1fr;
   }
 }
-.hero-date {
-  font-family: var(--f-display);
-  font-weight: 800;
-  font-size: clamp(2.2rem, 8vw, 3.6rem);
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-}
-.hero-date small {
-  display: block;
-  font-size: 0.38em;
-  letter-spacing: 0;
-  font-weight: 600;
-  color: var(--ink-soft);
-  margin-top: 8px;
-}
-.bigclock {
-  font-family: var(--f-mono);
-  font-size: 1.6rem;
-  font-weight: 700;
-}
-.chap-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 120px 44px;
-  gap: 10px;
-  align-items: center;
-  font-size: 0.95rem;
-}
-.mode {
+.hero-main {
+  position: relative;
+  overflow: hidden;
+  background: var(--hero);
+  color: var(--hero-ink);
+  border-radius: calc(var(--radius) + 4px);
+  padding: clamp(24px, 4vw, 36px);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 14px;
+  justify-content: center;
+  box-shadow: var(--shadow);
+}
+.hero-main > * {
+  position: relative;
+}
+.hero-main .eyebrow,
+.hero-main .lead {
+  color: var(--hero-soft);
+}
+/* Symboles du cours en filigrane */
+.hero-glyphs {
+  position: absolute;
+  right: -6px;
+  bottom: -30px;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: clamp(6rem, 15vw, 10rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--hero-ink);
+  opacity: 0.07;
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.hero-main .btn {
+  background: var(--hl);
+  border-color: var(--hl);
+  color: var(--hl-ink);
+}
+.hero-main .btn.alt {
+  background: transparent;
+  border-color: var(--hero-soft);
+  color: var(--hero-ink);
+}
+.today {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  justify-content: center;
+}
+.today-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  --ring: 92px;
+}
+.today-top .ring b {
+  font-size: 1.15rem;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.stat {
+  background: var(--card-2);
+  border-radius: 12px;
+  padding: 9px 6px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.stat b {
+  font-family: var(--f-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.stat span {
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  line-height: 1.25;
+}
+.resume {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+}
+.qday {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.chap-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+}
+.chap-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+  --ring: 58px;
+}
+.chap-card .ring b {
+  font-size: 0.8rem;
+}
+.chap-card b.name {
+  font-family: var(--f-display);
+  line-height: 1.2;
+  display: block;
+}
+.chap-links {
+  display: flex;
+  gap: 12px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-top: 4px;
+}
+.chap-links a {
+  color: var(--ch);
+}
+.path {
+  display: flex;
+  flex-direction: column;
+}
+.path-step {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
   text-decoration: none;
   color: var(--ink);
-  padding: 18px;
-  border-radius: 14px;
-  border: 1px solid var(--line);
-  background: var(--card);
-  box-shadow: var(--shadow);
-  transition:
-    transform 0.15s,
-    border-color 0.15s;
 }
-.mode:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent);
+.path-step:first-child {
+  border-top: 0;
 }
-.mode b {
+.path-num {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
   font-family: var(--f-display);
-  font-size: 1.12rem;
+  font-weight: 800;
+  background: var(--card-2);
+  color: var(--ink-soft);
 }
-.mode .k {
+.path-step.current .path-num {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.path-step.done .path-num {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+.path-step:hover b {
+  color: var(--accent);
+}
+.path-count {
   font-family: var(--f-mono);
-  font-size: 0.78rem;
-  color: var(--margin);
-  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
 }

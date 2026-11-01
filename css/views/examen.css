@@ -1,28 +1,110 @@
-/* exam */
-.timer {
-  font-family: var(--f-mono);
-  font-weight: 700;
-  font-size: 1.3rem;
-}
 .examsticky {
   position: sticky;
-  top: calc(env(safe-area-inset-top, 0px) + 92px);
+  top: calc(env(safe-area-inset-top, 0px) + var(--header-h) + 8px);
   z-index: 6;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lift);
+  padding: 10px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.examsticky-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+}
+.timer-box {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.timer {
+  font-family: var(--f-mono);
+  font-weight: 700;
+  font-size: 1.55rem;
+  font-variant-numeric: tabular-nums;
+}
+.examsticky .btn {
+  min-height: 40px;
+  padding: 8px 13px;
+}
+.timebar {
+  height: 6px;
+  background: var(--card-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.timebar > i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 1s linear;
+}
+.examsticky.warn .timer {
+  color: var(--warn);
+}
+.examsticky.warn .timebar > i {
+  background: var(--warn);
+}
+.examsticky.danger .timer {
+  color: var(--ko);
+  animation: pulse 1s ease-in-out infinite;
+}
+.examsticky.danger .timebar > i {
+  background: var(--ko);
+}
+@keyframes pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+.paused-note {
+  text-align: center;
+  padding: 40px 20px;
+}
+.dur-pick {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.dur {
+  flex: 1 1 220px;
+  text-align: left;
+  border: 1.5px solid var(--line);
   background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 8px 14px;
-  box-shadow: var(--shadow);
+  border-radius: 14px;
+  padding: 11px 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+.dur b {
+  font-family: var(--f-display);
+  font-size: 1.15rem;
+}
+.dur[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
 }
 .hist {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
+}
+.hist-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 90px 62px;
+  gap: 10px;
+  align-items: center;
+  font-size: 0.88rem;
+}
+.hist-row b {
   font-family: var(--f-mono);
-  font-size: 0.85rem;
+  text-align: right;
 }

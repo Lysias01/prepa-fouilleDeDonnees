@@ -1,12 +1,12 @@
-/* quiz */
 .qcard {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 .qtext {
-  font-size: 1.15rem;
-  font-weight: 600;
+  font-size: 1.16rem;
+  font-weight: 700;
+  line-height: 1.4;
 }
 .opts {
   display: flex;
@@ -17,13 +17,17 @@
   text-align: left;
   border: 1.5px solid var(--line);
   background: var(--card);
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 12px 14px;
+  min-height: 48px;
   cursor: pointer;
   display: flex;
   gap: 12px;
   align-items: flex-start;
   line-height: 1.45;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
 }
 .opt .l {
   font-family: var(--f-mono);
@@ -36,7 +40,7 @@
 }
 .opt.sel {
   border-color: var(--accent);
-  background: var(--card-2);
+  background: var(--accent-soft);
 }
 .opt.good {
   border-color: var(--ok);
@@ -48,44 +52,6 @@
 }
 .opt[disabled] {
   cursor: default;
-}
-.feedback {
-  border-radius: 12px;
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.feedback.ok {
-  background: var(--ok-bg);
-  border: 1px solid var(--ok);
-}
-.feedback.ko {
-  background: var(--ko-bg);
-  border: 1px solid var(--ko);
-}
-.feedback.info {
-  background: var(--card-2);
-  border: 1px solid var(--line);
-}
-.feedback .verdict {
-  font-weight: 800;
-}
-.answer {
-  border-left: 4px solid var(--ok);
-  background: var(--ok-bg);
-  padding: 12px 16px;
-  border-radius: 0 12px 12px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.answer ul,
-.answer ol,
-.prose ul,
-.prose ol {
-  margin: 0;
-  padding-left: 1.3em;
 }
 .kw {
   display: flex;
@@ -109,11 +75,11 @@
   border-color: var(--ko);
   color: var(--ko);
 }
-.scorebar {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
+.series-end {
   align-items: center;
-  font-family: var(--f-mono);
-  font-size: 0.85rem;
+  text-align: center;
+  padding-block: 32px;
+}
+.series-end .row {
+  justify-content: center;
 }

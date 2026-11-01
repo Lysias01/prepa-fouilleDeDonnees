@@ -1,7 +1,18 @@
 /* ===== Stockage local (confort par appareil) ===== */
 const KEY = 'fouille-aa-revision-v1';
 const store = {
-  data: { cards: {}, q: {}, ex: {}, exams: [], theme: null },
+  data: {
+    q: {},
+    ex: {},
+    exams: [],
+    theme: null,
+    seenCards: {},
+    tutos: {},
+    days: {},
+    qday: null,
+    examDur: 120,
+    examDraft: null
+  },
   load() {
     try {
       const s = localStorage.getItem(KEY);

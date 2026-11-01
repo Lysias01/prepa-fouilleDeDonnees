@@ -5,7 +5,6 @@ const EXAMS = [
   {
     id: 'A',
     title: 'Sujet A',
-    dur: 120,
     desc: 'Cours (6) · Règles d’association (5) · K-means (5) · Arbre de décision (4)',
     sections: () => [
       {
@@ -43,6 +42,7 @@ const EXAMS = [
       },
       {
         title: 'II. Règles d’association',
+        tuto: 'apriori',
         pts: 5,
         intro:
           '<p>R = Roman, P = Policier, B = BD, S = Science, H = Histoire. minsup = 50 %, minconf = 70 %.</p>' +
@@ -51,12 +51,14 @@ const EXAMS = [
       },
       {
         title: 'III. Clustering',
+        tuto: 'kmeans',
         pts: 5,
         intro: '<p>k = 2, centres initiaux P1 et P2, distance euclidienne.</p>' + ptsTable(DS.P16),
         parts: partsKmeansNew().filter((p) => p.pts)
       },
       {
         title: 'IV. Classification',
+        tuto: 'gain',
         pts: 4,
         intro:
           table(
@@ -70,7 +72,6 @@ const EXAMS = [
   {
     id: 'B',
     title: 'Sujet B',
-    dur: 120,
     desc: 'Cours (5) · Règles (5) · CAH (5) · Naïve Bayes, métriques et Python (5)',
     sections: () => [
       {
@@ -103,18 +104,21 @@ const EXAMS = [
       },
       {
         title: 'II. Règles d’association',
+        tuto: 'apriori',
         pts: 5,
         intro: '<p>minsup = 50 %, minconf = 75 %.</p>' + transTable(DS.panier.T),
         parts: partsPanier()
       },
       {
         title: 'III. Clustering hiérarchique',
+        tuto: 'cah',
         pts: 5,
         intro: '<p>Saut minimal, distance euclidienne.</p>' + ptsTable(DS.PT),
         parts: partsCah().filter((p) => p.pts)
       },
       {
         title: 'IV. Classification',
+        tuto: 'bayes',
         pts: 5,
         intro:
           table(

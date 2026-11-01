@@ -123,6 +123,17 @@ function checkField(f, root) {
   return fieldKind(f).check(f, $(`[data-f="${f._id}"]`, root));
 }
 
+/* Lecture et restauration des réponses, pour retrouver une copie après un rechargement. */
+const fieldInputs = (f, root) => $$('input,select,textarea', $(`[data-f="${f._id}"]`, root));
+const isToggle = (e) => e.type === 'radio' || e.type === 'checkbox';
+const readField = (f, root) => fieldInputs(f, root).map((e) => (isToggle(e) ? e.checked : e.value));
+const writeField = (f, root, values) =>
+  fieldInputs(f, root).forEach((e, i) => {
+    if (isToggle(e)) e.checked = !!values[i];
+    else e.value = values[i] ?? '';
+  });
+const fieldAnswered = (f, root) => readField(f, root).some((v) => v === true || (typeof v === 'string' && v.trim()));
+
 function revealOpen(f, root, onGrade) {
   const el = $(`[data-f="${f._id}"]`, root);
   const res = $('.openres', el);

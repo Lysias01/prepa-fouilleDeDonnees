@@ -1,39 +1,91 @@
 /* ===================== ACCUEIL ===================== */
+/* Question du jour : la même toute la journée, une nouvelle chaque jour (QCM à une seule réponse). */
+function questionOfTheDay() {
+  const qcms = QUESTIONS.filter((q) => q.type === 'qcm' && !Array.isArray(q.a));
+  const [y, m, d] = dayKey().split('-').map(Number);
+  return qcms[Math.floor(Date.UTC(y, m - 1, d) / 86400000) % qcms.length];
+}
+
+function renderQuestionOfTheDay(box) {
+  const doneHTML = '<p class="muted">Faite pour aujourd’hui. Une nouvelle t’attend demain.</p>';
+  if (store.data.qday === dayKey()) {
+    box.append(h(doneHTML));
+    return;
+  }
+  const q = questionOfTheDay();
+  box.append(h(`<p class="qtext">${q.q}</p>`));
+  const zone = h('<div class="stack"></div>');
+  box.append(zone);
+  renderQcm(q, zone, () => {
+    store.data.qday = dayKey();
+    store.save();
+    zone.append(
+      h('<a class="btn primary" style="align-self:flex-start" href="#questions">Continuer avec une série →</a>')
+    );
+  });
+}
+
+const chapterCardHTML = (c) => {
+  const v = mastery(c.id);
+  return `<div class="chap-card" style="${chStyle(c.id)}">${ring(v * 100, Math.round(v * 100) + '%')}<div class="stack" style="gap:2px"><b class="name">${c.name}</b><div class="chap-links"><a href="#fiches-${c.id}">Fiches</a><a href="#questions-${c.id}">Questions</a></div></div></div>`;
+};
+
+const pathStepHTML = (s, i, current) => {
+  const n = s.count(),
+    tot = s.total(),
+    done = n >= tot;
+  return `<a class="path-step ${done ? 'done' : s === current ? 'current' : ''}" href="${s.href}"><span class="path-num">${done ? '✓' : i + 1}</span><span class="stack" style="gap:1px"><b>${s.title}</b><span class="small muted">${s.desc}</span></span><span class="path-count">${n}/${tot}</span></a>`;
+};
+
+function resumeBannerHTML() {
+  const draft = store.data.examDraft;
+  if (!draft) return '';
+  const x = EXAMS.find((e) => e.id === draft.id);
+  return `<div class="resume"><span><b>Simulation en cours :</b> ${x.title}, il reste ${fmtClock(examTimeLeft(draft))}.</span><a class="btn primary" href="#examen-${draft.id}">Reprendre ma copie</a></div>`;
+}
+
 VIEWS.accueil = (main) => {
-  const tot = mastery();
-  main.append(
-    h(`<div class="view">
+  const next = REVISION_PATH.find((s) => s.count() < s.total()) || REVISION_PATH[REVISION_PATH.length - 1];
+  const today = todayCount(),
+    streak = streakDays(),
+    errors = errorCount(),
+    best = bestExamNote();
+  const v = h(`<div class="view">
+    ${resumeBannerHTML()}
     <section class="hero">
-      <div class="sheet margin stack">
+      <div class="hero-main">
+        <span class="hero-glyphs" aria-hidden="true">Σ∪→</span>
         <span class="eyebrow">Fouille de données et apprentissage automatique · M1 IBAM</span>
-        <div class="hero-date">Lundi 2 novembre<small>18 h · sans documents, sans calculatrice</small></div>
-        <p class="bigclock" id="bigclock">${countdownText()}</p>
-        <p class="lead">Révise par questions-réponses, comprends les méthodes pas à pas, puis entraîne-toi comme au devoir. Ta progression est gardée sur cet appareil.</p>
-        <div class="row"><a class="btn primary" href="#questions">Commencer les questions de cours</a><a class="btn" href="#fiches">Revoir les définitions</a></div>
+        <h1>${today ? 'Belle lancée, on continue.' : 'On révise un peu ?'}</h1>
+        <p class="lead">Dix minutes suffisent : quelques questions, une méthode, et ta progression avance.</p>
+        <div class="row"><a class="btn" href="${next.href}">${next.cta} →</a>${errors ? `<button class="btn alt" id="reviewErrors">Revoir mes ${errors} erreur${errors > 1 ? 's' : ''}</button>` : `<a class="btn alt" href="#questions">Série de 10 questions</a>`}</div>
       </div>
-      <div class="sheet stack">
-        <div class="row" style="justify-content:space-between"><h3>Ta maîtrise</h3><span class="mono">${Math.round(tot * 100)} %</span></div>
-        <div class="progress" aria-hidden="true"><i style="width:${tot * 100}%"></i></div>
-        <div class="stack" style="gap:8px">${CHAPTERS.map((c) => {
-          const v = mastery(c.id);
-          return `<div class="chap-row"><span>${c.name}</span><div class="progress"><i style="width:${v * 100}%"></i></div><span class="mono small">${Math.round(v * 100)} %</span></div>`;
-        }).join('')}</div>
-        <p class="small muted">${seenCount()} question(s) travaillée(s) sur ${QUESTIONS.length} · ${Object.values(store.data.cards).filter((v) => v === 'ok').length} fiche(s) sue(s) sur ${CARDS.length}</p>
+      <div class="sheet today">
+        <div class="today-top">${ring(Math.min(today / DAILY_GOAL, 1) * 100, `${today}/${DAILY_GOAL}`)}<div class="stack" style="gap:2px"><h3>Objectif du jour</h3><span class="small muted">${today >= DAILY_GOAL ? 'Atteint. Tout ce que tu fais en plus est du bonus.' : `Encore ${DAILY_GOAL - today} question${DAILY_GOAL - today > 1 ? 's' : ''} aujourd’hui.`}</span></div></div>
+        <div class="stats">
+          <div class="stat"><b>${streak}</b><span>jour${streak > 1 ? 's' : ''} d’affilée</span></div>
+          <div class="stat"><b>${Math.round(mastery() * 100)} %</b><span>du cours maîtrisé</span></div>
+          <div class="stat"><b>${best == null ? '–' : fmt(best, 1)}</b><span>meilleure note /20</span></div>
+        </div>
       </div>
     </section>
-    <section class="grid g3">
-      <a class="mode" href="#fiches"><span class="k">${CARDS.length} fiches</span><b>Définitions</b><span class="muted">Courtes, faciles à retenir, en cartes recto-verso.</span></a>
-      <a class="mode" href="#questions"><span class="k">${QUESTIONS.length} questions</span><b>Questions de cours</b><span class="muted">QCM et réponses rédigées, dont celles déjà tombées en devoir.</span></a>
-      <a class="mode" href="#methodes"><span class="k">${TUTOS.length} méthodes</span><b>Pas à pas</b><span class="muted">Apriori, K-means, CAH, gain, Bayes… expliqués étape par étape.</span></a>
-      <a class="mode" href="#exercices"><span class="k">${EXOS.length} exercices</span><b>Mode devoir</b><span class="muted">Réponds, vérifie, puis lis la correction détaillée.</span></a>
-      <a class="mode" href="#examen"><span class="k">2 sujets · 2 h</span><b>Examen blanc</b><span class="muted">Chronométré, noté sur 20 avec barème.</span></a>
-      <a class="mode" href="#memo"><span class="k">1 page</span><b>Mémo et pièges</b><span class="muted">Toutes les formules et les erreurs à éviter.</span></a>
-    </section>
-    <section class="sheet margin stack">
-      <h2>Ton plan jusqu’au devoir</h2>
-      <div class="stack">${REVISION_PLAN.map((p, i) => `<div class="row" style="align-items:flex-start;gap:14px;flex-wrap:nowrap"><span class="hand" style="min-width:1.4em">${i + 1}.</span><div class="stack" style="gap:2px;min-width:0"><b>${p[0]}</b><span class="muted">${p[1]} <a href="${p[2]}">Ouvrir</a></span></div></div>`).join('')}</div>
+    <section class="sheet qday"><span class="eyebrow">Question du jour</span><div class="stack" id="qday"></div></section>
+    <section class="stack"><h2>Par chapitre</h2><div class="chap-grid">${CHAPTERS.map(chapterCardHTML).join('')}</div></section>
+    <section class="sheet stack">
+      <h2>Ton parcours</h2>
+      <div class="path">${REVISION_PATH.map((s, i) => pathStepHTML(s, i, next)).join('')}</div>
       <div class="tip"><span class="hand">Ce qui tombe à chaque devoir :</span> questions de cours (3 à 6 pts), règles d’association (6 pts), clustering (4 à 8 pts), arbre de décision (7 à 8 pts) et une question de code Python.</div>
     </section>
-  </div>`)
-  );
+  </div>`);
+  main.append(v);
+  renderQuestionOfTheDay($('#qday', v));
+  const rev = $('#reviewErrors', v);
+  if (rev) {
+    rev.onclick = () => {
+      qState.ch = 'all';
+      qState.mode = 'rev';
+      buildDeck();
+      location.hash = '#questions';
+    };
+  }
 };

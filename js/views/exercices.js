@@ -19,8 +19,8 @@ function renderExo(main, id) {
   const tot = parts.reduce((s, p) => s + (p.pts || 0), 0);
   const v = h(`<div class="view">
     <div class="stack"><a href="#exercices" class="small">← Tous les exercices</a><div class="row" style="gap:8px"><span class="tag">${chName(e.ch)}</span><span class="tag ${e.tag.startsWith('Annale') ? 'dv' : ''}">${e.tag}</span></div><h1>${e.title}</h1></div>
-    <div class="sheet margin stack"><div class="prose" style="max-width:none">${e.intro()}</div></div>
-    <div class="sheet margin" id="parts"></div>
+    <div class="sheet stack"><div class="prose" style="max-width:none">${e.intro()}</div></div>
+    <div class="sheet" id="parts"></div>
     <div class="sheet row" style="justify-content:space-between"><span>Score : <b class="mono" id="sc">0</b> / ${fmt(tot)} <span class="muted small">(sur 20 : <span id="sc20">0</span>)</span></span><div class="row"><a class="btn ghost" href="#methode-${e.tuto}">Revoir la méthode</a><button class="btn" id="reset">Recommencer</button></div></div>
   </div>`);
   main.append(v);

@@ -1,0 +1,11 @@
+{
+  "name": "Révision Fouille AA",
+  "short_name": "Fouille·AA",
+  "description": "Fiches, questions de cours, méthodes pas à pas, exercices et simulations de devoir.",
+  "lang": "fr",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f6f4ee",
+  "theme_color": "#0f4a44",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

@@ -3,29 +3,21 @@
 }
 html {
   -webkit-text-size-adjust: 100%;
+  background: var(--paper);
 }
 body {
   margin: 0;
-  background: var(--paper);
   color: var(--ink);
   font-family: var(--f-body);
-  font-size: 16.5px;
+  font-size: 17px;
   line-height: 1.6;
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 28px 28px;
-  background-attachment: fixed;
-}
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0 0 auto;
-  height: env(safe-area-inset-top, 0px);
-  z-index: 30;
-  background: var(--card);
+  background:
+    radial-gradient(1100px 420px at 50% -120px, var(--paper-glow), transparent 70%) no-repeat,
+    var(--paper);
 }
 a {
   color: var(--accent);
+  text-underline-offset: 2px;
 }
 button,
 input,
@@ -48,17 +40,17 @@ h3 {
   margin: 0;
 }
 h1 {
-  font-size: clamp(1.9rem, 5vw, 2.7rem);
+  font-size: clamp(1.9rem, 5vw, 2.6rem);
   font-weight: 800;
   letter-spacing: -0.02em;
 }
 h2 {
-  font-size: 1.45rem;
-  font-weight: 750;
+  font-size: 1.4rem;
+  font-weight: 700;
   letter-spacing: -0.01em;
 }
 h3 {
-  font-size: 1.12rem;
+  font-size: 1.1rem;
   font-weight: 700;
 }
 p {
@@ -87,4 +79,27 @@ mark,
 }
 .small {
   font-size: 0.88rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+@media print {
+  html,
+  body {
+    background: #fff;
+  }
+  .top,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+  .sheet {
+    box-shadow: none;
+    break-inside: avoid;
+  }
 }

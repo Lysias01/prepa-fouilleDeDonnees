@@ -23,7 +23,7 @@ function route() {
   const raw = (location.hash || '#accueil').slice(1);
   let name = raw,
     arg = null;
-  const m = raw.match(/^(methode|exercice|examen)-(.+)$/);
+  const m = raw.match(/^(methode|exercice|examen|fiches|questions)-(.+)$/);
   if (m) {
     name = m[1];
     arg = m[2];
