@@ -30,6 +30,7 @@ function route() {
   }
   const fn = VIEWS[name] || VIEWS.accueil;
   const main = $('#main');
+  Reader.stop();
   main.innerHTML = '';
   if (leaveView) {
     leaveView();

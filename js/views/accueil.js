@@ -69,7 +69,7 @@ VIEWS.accueil = (main) => {
         </div>
       </div>
     </section>
-    <section class="sheet qday"><span class="eyebrow">Question du jour</span><div class="stack" id="qday"></div></section>
+    <section class="sheet qday"><div class="row between"><span class="eyebrow">Question du jour</span>${listenIcon('qday')}</div><div class="stack" id="qday"></div></section>
     <section class="stack"><h2>Par chapitre</h2><div class="chap-grid">${CHAPTERS.map(chapterCardHTML).join('')}</div></section>
     <section class="sheet stack">
       <h2>Ton parcours</h2>
@@ -79,6 +79,7 @@ VIEWS.accueil = (main) => {
   </div>`);
   main.append(v);
   renderQuestionOfTheDay($('#qday', v));
+  bindListen(v, 'qday', () => Reader.play(Reader.blocks($('#qday', v)), { owner: 'qday' }));
   const rev = $('#reviewErrors', v);
   if (rev) {
     rev.onclick = () => {

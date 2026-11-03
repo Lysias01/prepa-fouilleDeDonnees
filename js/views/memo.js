@@ -2,8 +2,8 @@
 VIEWS.memo = (main) => {
   main.append(
     h(`<div class="view">
-    <div class="stack"><span class="eyebrow">À relire juste avant le devoir</span><h1>Mémo et pièges</h1><div class="row no-print"><button class="btn" id="printMemo">Imprimer le mémo</button></div></div>
-    <div class="grid g2">
+    <div class="stack"><span class="eyebrow">À relire juste avant le devoir</span><h1>Mémo et pièges</h1><div class="row no-print">${listenGroup('memo', 'Écouter le mémo')}<button class="btn" id="printMemo">Imprimer le mémo</button></div></div>
+    <div class="stack" id="memoBody"><div class="grid g2">
       <div class="sheet stack"><h2>Règles d’association</h2><div class="formula">sup(X → Y) = P(X ∪ Y) = nb de transactions contenant X et Y / N
 conf(X → Y) = sup(X ∪ Y) / sup(X) = P(Y | X)
 Valide : sup ≥ minsup ET conf ≥ minconf
@@ -24,7 +24,8 @@ Outlier : x < Q1 − 1,5·IQR ou x > Q3 + 1,5·IQR</div></div>
     </div>
     <div class="sheet stack"><h2>Les pièges qui coûtent des points</h2><div class="stack">${TRAPS.map((t) => `<div class="trap"><b>${t[0]}</b> : ${t[1]}</div>`).join('')}</div></div>
     <div class="sheet stack"><h2>Rédiger une question de cours</h2><ol class="prose"><li><b>Définir</b> avec les mots du cours (une phrase).</li><li><b>Expliquer</b> le principe ou les étapes (2 à 4 lignes).</li><li><b>Illustrer</b> par un exemple ou un algorithme.</li><li>Pour une comparaison : un tableau à deux colonnes.</li></ol></div>
-  </div>`)
+  </div></div>`)
   );
   $('#printMemo', main).onclick = () => window.print();
+  bindListen(main, 'memo', () => Reader.play(Reader.blocks($('#memoBody', main)), { owner: 'memo' }));
 };

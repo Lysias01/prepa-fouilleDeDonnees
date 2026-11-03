@@ -54,6 +54,7 @@ VIEWS.questions = (main, arg) => {
     <div class="filters">
       ${chapterChips(qState.ch)}
       <div class="chips" role="group" aria-label="Type">${QUESTION_MODES.map((m) => `<button class="chip" data-mode="${m[0]}" aria-pressed="${qState.mode === m[0]}">${m[1]}</button>`).join('')}</div>
+      <div class="row"><span class="listen-group"><button type="button" class="chip" id="autoRead" aria-pressed="${!!store.data.autoRead}">${ICON_SPEAKER}Lecture auto</button>${rateControl()}</span></div>
       <div class="chips" role="group" aria-label="Longueur de la série">${SERIES_SIZES.map((s) => `<button class="chip" data-size="${s[0]}" aria-pressed="${qState.size === s[0]}">${s[1]}</button>`).join('')}</div>
     </div>
     <div id="qbody"></div></div>`);
@@ -75,6 +76,14 @@ VIEWS.questions = (main, arg) => {
   onFilter('size', (x) => {
     qState.size = +x;
   });
+  $('#autoRead', shell).onclick = (e) => {
+    store.data.autoRead = !store.data.autoRead;
+    store.save();
+    e.currentTarget.setAttribute('aria-pressed', store.data.autoRead);
+    const card = $('.qcard', shell);
+    if (!store.data.autoRead) Reader.stop();
+    else if (card) readQuestionCard(card);
+  };
   renderQuestion($('#qbody', shell));
 
   /* Clavier : A, B, C, D pour répondre à un QCM */
@@ -192,6 +201,13 @@ function renderOpenQuestion(q, zone, onRevealed, onGraded) {
   };
 }
 
+/* Lit l'énoncé, les choix et la correction si elle est affichée */
+const readQuestionCard = (card) => Reader.play(Reader.blocks(card), { owner: card.dataset.owner });
+/* Lecture auto : la correction dès qu'on a répondu */
+const autoReadAnswer = (card, el) => {
+  if (store.data.autoRead && el) Reader.play(Reader.blocks(el), { owner: card.dataset.owner });
+};
+
 function renderQuestion(body) {
   body.innerHTML = '';
   const d = qState.deck;
@@ -208,8 +224,8 @@ function renderQuestion(body) {
     return;
   }
   const q = d[qState.i];
-  const card = h(`<div class="sheet qcard fade" style="${chStyle(q.ch)}">
-    <div class="row" style="gap:6px"><span class="tag">${chName(q.ch)}</span><span class="tag" style="--ch:var(--ink-soft)">${q.type === 'qcm' ? (Array.isArray(q.a) ? 'Plusieurs réponses' : 'QCM') : 'Réponse rédigée'}</span>${q.src ? `<span class="tag dv">${SRC[q.src]}</span>` : ''}</div>
+  const card = h(`<div class="sheet qcard fade" style="${chStyle(q.ch)}" data-owner="q-${q.id}">
+    <div class="row" style="gap:6px"><span class="tag">${chName(q.ch)}</span><span class="tag" style="--ch:var(--ink-soft)">${q.type === 'qcm' ? (Array.isArray(q.a) ? 'Plusieurs réponses' : 'QCM') : 'Réponse rédigée'}</span>${q.src ? `<span class="tag dv">${SRC[q.src]}</span>` : ''}${listenIcon('q-' + q.id)}</div>
     <div class="progress" aria-hidden="true"><i style="width:${(qState.i / d.length) * 100}%"></i></div>
     <p class="qtext">${q.q}</p><div id="zone" class="stack"></div>
     <div class="row between"><button class="btn ghost" id="skip">Passer</button><button class="btn primary" id="next" hidden>Question suivante →</button></div>
@@ -224,9 +240,12 @@ function renderQuestion(body) {
   };
   next.onclick = goNext;
   skip.onclick = goNext;
+  bindListen(card, 'q-' + q.id, () => readQuestionCard(card));
+  if (store.data.autoRead) readQuestionCard(card);
   if (q.type === 'qcm') {
     renderQcm(q, zone, (r) => {
       qState.score[r]++;
+      autoReadAnswer(card, $('.feedback', zone));
       next.hidden = false;
       skip.hidden = true;
       next.focus({ preventScroll: true });
@@ -237,6 +256,7 @@ function renderQuestion(body) {
       zone,
       () => {
         skip.hidden = true;
+        autoReadAnswer(card, $('.answer', zone));
       },
       (r) => {
         qState.score[r]++;

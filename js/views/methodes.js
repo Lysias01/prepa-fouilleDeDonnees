@@ -17,7 +17,7 @@ function renderTuto(main, id) {
   const steps = t.steps();
   let i = 0;
   const v = h(`<div class="view">
-    <div class="stack"><a href="#methodes" class="small">← Toutes les méthodes</a><span class="eyebrow">${chName(t.ch)}</span><h1>${t.title}</h1><p class="lead">${t.sub}</p></div>
+    <div class="stack"><a href="#methodes" class="small">← Toutes les méthodes</a><span class="eyebrow">${chName(t.ch)}</span><h1>${t.title}</h1><p class="lead">${t.sub}</p><div class="row">${listenGroup('steps', 'Écouter les étapes')}</div></div>
     <div class="sheet stepper"><div class="dots" id="dots"></div><div id="stepbody" class="stack"></div></div>
     <div class="stepnav"><button class="btn" id="prev">← Précédent</button><span class="mono small" id="cnt" style="align-self:center"></span><button class="btn primary" id="next">Suivant →</button></div>
   </div>`);
@@ -27,52 +27,64 @@ function renderTuto(main, id) {
     prev = $('#prev', v),
     next = $('#next', v),
     cnt = $('#cnt', v);
-  steps.forEach((_, k) => {
-    const b = h(`<button aria-label="Étape ${k + 1}"></button>`);
-    b.onclick = () => {
-      i = k;
-      show();
-    };
-    dots.append(b);
-  });
-  const show = () => {
-    const s = steps[i];
+
+  const stepEl = (k) =>
+    h(
+      `<div class="stack"><div class="stack fade"><div class="steptitle"><span class="n">${k + 1}/${steps.length}</span><h2>${steps[k].t}</h2></div><div class="stack">${steps[k].h}</div></div>${
+        k === steps.length - 1 && t.ex
+          ? `<div class="row"><a class="btn primary" href="#exercice-${t.ex}">S’exercer maintenant →</a><a class="btn" href="#methodes">Autre méthode</a></div>`
+          : ''
+      }</div>`
+    );
+  /* el : étape déjà construite par la lecture audio (mêmes nœuds texte, le surlignage reste valide) */
+  const show = (k, el) => {
+    i = k;
     if (i === steps.length - 1) {
       store.data.tutos[t.id] = 1;
       store.save();
     }
     sb.innerHTML = '';
-    sb.append(
-      h(
-        `<div class="stack fade"><div class="steptitle"><span class="n">${i + 1}/${steps.length}</span><h2>${s.t}</h2></div><div class="stack">${s.h}</div></div>`
-      )
-    );
-    if (i === steps.length - 1 && t.ex)
-      sb.append(
-        h(
-          `<div class="row"><a class="btn primary" href="#exercice-${t.ex}">S’exercer maintenant →</a><a class="btn" href="#methodes">Autre méthode</a></div>`
-        )
-      );
-    $$('button', dots).forEach((b, k) => {
-      b.className = k === i ? 'on' : k < i ? 'done' : '';
+    sb.append(el || stepEl(k));
+    $$('button', dots).forEach((b, n) => {
+      b.className = n === i ? 'on' : n < i ? 'done' : '';
     });
     prev.disabled = i === 0;
     next.disabled = i === steps.length - 1;
     cnt.textContent = `Étape ${i + 1} sur ${steps.length}`;
   };
+
+  /* Écoute : lit l'étape affichée puis enchaîne les suivantes sans blanc */
+  const listen = () => {
+    let queued = i;
+    Reader.play(Reader.blocks(sb), {
+      owner: 'steps',
+      chain: () => {
+        const k = queued + 1;
+        if (k >= steps.length) return null;
+        queued = k;
+        const el = stepEl(k);
+        return { items: Reader.blocks(el), enter: () => show(k, el) };
+      }
+    });
+  };
+  bindListen(v, 'steps', listen);
+  /* Choisir une autre étape pendant l'écoute relance la lecture depuis celle-ci */
+  const goTo = (k) => {
+    show(k);
+    if (Reader.owner() === 'steps') listen();
+    else window.scrollTo({ top: 0 });
+  };
+
+  steps.forEach((_, k) => {
+    const b = h(`<button aria-label="Étape ${k + 1}"></button>`);
+    b.onclick = () => goTo(k);
+    dots.append(b);
+  });
   prev.onclick = () => {
-    if (i > 0) {
-      i--;
-      show();
-      window.scrollTo({ top: 0 });
-    }
+    if (i > 0) goTo(i - 1);
   };
   next.onclick = () => {
-    if (i < steps.length - 1) {
-      i++;
-      show();
-      window.scrollTo({ top: 0 });
-    }
+    if (i < steps.length - 1) goTo(i + 1);
   };
   v.tabIndex = -1;
   const key = (e) => {
@@ -82,5 +94,5 @@ function renderTuto(main, id) {
   };
   document.addEventListener('keydown', key);
   onViewLeave(() => document.removeEventListener('keydown', key));
-  show();
+  show(0);
 }

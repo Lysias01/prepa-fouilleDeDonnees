@@ -11,6 +11,11 @@ Site statique de révision : fiches, questions de cours (QCM + réponses rédig�
 Le site fonctionne aussi hors ligne : il suffit d'ouvrir `index.html` dans un navigateur (garder `css/` et `js/` à côté). Une fois visité en ligne, il reste aussi consultable sans connexion grâce à `sw.js`.
 La progression est enregistrée dans le navigateur de chaque appareil.
 
+## Écoute
+Chaque méthode, la liste ou les cartes de fiches, chaque question, chaque exercice et le mémo peuvent être écoutés (bouton « Écouter » ou icône haut-parleur, vitesse « − 1× + » à côté). Le passage lu et le mot prononcé sont surlignés dans la page. Échap arrête la lecture.
+
+La voix est celle du navigateur (`speechSynthesis`, français), choisie automatiquement : voix « Natural / Online » d'abord, puis Google, puis toute voix `fr-FR`. Si la voix en ligne tarde à démarrer, le lecteur passe sur une voix installée sur l'appareil.
+
 ## Organisation du code
 
 ```
@@ -23,7 +28,7 @@ css/
   views/            styles propres à chaque page
 js/
   core/             utilitaires, stockage local, thème
-  ui/               composants HTML et champs de réponse corrigés automatiquement
+  ui/               composants HTML, champs de réponse corrigés automatiquement, lecteur audio (reader.js)
   algos/            Apriori, K-means, CAH, gain d'information, Naïve Bayes : calcul et étapes expliquées
   data/             contenu : fiches, questions, jeux de données, méthodes, exercices, examens, pièges, plan
   app/              routeur, progression, démarrage
@@ -36,5 +41,6 @@ Où intervenir :
 - **Ajouter un type de champ de réponse :** `FIELD_KINDS` dans `js/ui/answer-fields.js`.
 - **Changer les durées de simulation :** `EXAM_DURATIONS` dans `js/views/examen.js`.
 - **Changer l'objectif du jour :** `DAILY_GOAL` dans `js/app/progress.js`.
+- **Lecture audio :** `Reader` dans `js/ui/reader.js` ; les boutons se créent avec `listenGroup(owner, libellé)` ou `listenIcon(owner)` et se branchent avec `bindListen(racine, owner, démarrer)`.
 
 Les scripts sont volontairement classiques (pas de modules ES ni d'étape de compilation) : les modules ne se chargent pas quand on ouvre le fichier directement (`file://`). Ils partagent donc la même portée globale, et l'ordre des balises dans `index.html` compte.

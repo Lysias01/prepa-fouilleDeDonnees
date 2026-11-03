@@ -196,10 +196,12 @@ function addExerciseActions(p, blk, showCorr, onChange) {
 
 function renderParts(container, parts, mode, onChange) {
   parts.forEach((p, k) => {
+    const owner = 'part' + ++UID;
     const blk = h(
-      `<div class="exq"><div class="qhead"><b>${p.fields.length ? k + 1 + '. ' : ''}${p.q}</b>${p.pts ? `<span class="pts">${fmt(p.pts)} pt${p.pts > 1 ? 's' : ''}</span>` : ''}</div><div class="stack">${p.fields.map(fieldHTML).join('')}</div><div class="row actions"></div><div class="corrzone stack"></div></div>`
+      `<div class="exq"><div class="qhead"><b>${p.fields.length ? k + 1 + '. ' : ''}${p.q}</b><span class="row" style="gap:8px">${p.pts ? `<span class="pts">${fmt(p.pts)} pt${p.pts > 1 ? 's' : ''}</span>` : ''}${listenIcon(owner)}</span></div><div class="stack">${p.fields.map(fieldHTML).join('')}</div><div class="row actions"></div><div class="corrzone stack"></div></div>`
     );
     container.append(blk);
+    bindListen(blk, owner, () => Reader.play(Reader.blocks(blk), { owner }));
     const cz = $('.corrzone', blk);
     const corrHTML = () => (typeof p.corr === 'function' ? p.corr() : p.corr) || '';
     const showCorr = (open) => {

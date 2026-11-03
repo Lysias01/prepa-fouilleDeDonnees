@@ -14,7 +14,7 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
       .map((r) => r.name)
       .filter((u) => u.startsWith(location.origin));
     caches
-      .open('fouille-aa')
+      .open('fouille-aa-v2')
       .then((c) => c.addAll([location.pathname, ...files]))
       .catch(() => {});
   });

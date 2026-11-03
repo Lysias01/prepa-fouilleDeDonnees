@@ -11,7 +11,9 @@ const store = {
     days: {},
     qday: null,
     examDur: 120,
-    examDraft: null
+    examDraft: null,
+    rate: 1,
+    autoRead: false
   },
   load() {
     try {

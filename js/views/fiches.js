@@ -12,24 +12,22 @@ function buildFicheDeck() {
 const ficheListHTML = (d) =>
   `<div class="sheet"><div class="deflist">${d.map((c) => `<div class="defitem"><div><b>${c.t}</b>${c.hc ? ' <span class="tag hc">Hors cours</span>' : ''}<div class="small muted">${chName(c.ch)}</div></div><div>${c.d}${c.m ? `<div class="hand" style="font-size:1.15rem;margin-top:4px">${c.m}</div>` : ''}</div></div>`).join('')}</div></div>`;
 
-function renderFicheCard(body) {
+/* Carte n° i, construite sans être affichée : la lecture audio prépare ainsi la suivante à l'avance. */
+function ficheCardEl(i) {
   const d = fState.deck;
-  const c = d[fState.i];
-  store.data.seenCards[c.id] = 1;
-  store.save();
+  const c = d[i];
   const card = h(`<div class="stack" style="${chStyle(c.ch)}">
       <div class="flip" id="flip" tabindex="0" role="button" aria-label="Retourner la carte">
         <div class="flip-in">
-          <div class="face"><span class="eyebrow">${chName(c.ch)}</span><div class="term">${c.t}</div><span class="muted small">Touche la carte pour voir la définition</span></div>
+          <div class="face"><span class="eyebrow">${chName(c.ch)}</span><div class="term">${c.t}</div><span class="muted small" data-noread>Touche la carte pour voir la définition</span></div>
           <div class="face back"><span class="eyebrow">${c.t}</span><div class="def">${c.d}</div>${c.m ? `<div class="hand">${c.m}</div>` : ''}${c.hc ? '<span class="tag hc" style="align-self:flex-start">Hors cours</span>' : ''}</div>
         </div>
       </div>
       <div class="fnav">
         <button class="btn" id="prev" aria-label="Fiche précédente">←</button>
-        <div class="fcount"><span>${fState.i + 1} / ${d.length}</span><div class="progress"><i style="width:${((fState.i + 1) / d.length) * 100}%"></i></div></div>
+        <div class="fcount"><span>${i + 1} / ${d.length}</span><div class="progress"><i style="width:${((i + 1) / d.length) * 100}%"></i></div></div>
         <button class="btn primary" id="next" aria-label="Fiche suivante">→</button>
       </div></div>`);
-  body.append(card);
   const flip = $('#flip', card);
   flip.onclick = () => flip.classList.toggle('on');
   $('#prev', card).onclick = () => goFiche(-1);
@@ -46,15 +44,60 @@ function renderFicheCard(body) {
       goFiche(dx < 0 ? 1 : -1);
     }
   };
+  return card;
+}
+
+function showFicheCard(body, i, el) {
+  fState.i = i;
+  store.data.seenCards[fState.deck[i].id] = 1;
+  store.save();
+  body.innerHTML = '';
+  body.append(el || ficheCardEl(i));
+}
+
+/* Écoute d'une carte : le terme, 2 s pour réciter, la carte se retourne, puis la définition (sans relire le terme). */
+function ficheCardItems(card) {
+  const flip = $('.flip', card);
+  const back = Reader.blocks($('.face.back', card));
+  return [
+    $('.face:not(.back) .term', card),
+    ...back.map((el, k) => (k ? el : { el, pause: 2000, before: () => flip.classList.add('on') }))
+  ];
+}
+
+function listenFiches() {
+  const body = $('#fbody');
+  if (fState.mode === 'list') {
+    /* Liste : on commence à la première fiche visible */
+    const top = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'));
+    const first = $$('.defitem', body).find((e) => e.getBoundingClientRect().bottom > top + 8);
+    const items = Reader.blocks(body).filter(
+      (el) => !first || first.contains(el) || first.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING
+    );
+    Reader.play(items, { owner: 'fiches' });
+    return;
+  }
+  let queued = fState.i;
+  Reader.play(ficheCardItems(body), {
+    owner: 'fiches',
+    chain: () => {
+      const k = queued + 1;
+      if (k >= fState.deck.length) return null;
+      queued = k;
+      const el = ficheCardEl(k);
+      return { items: ficheCardItems(el), enter: () => showFicheCard(body, k, el) };
+    }
+  });
 }
 
 function renderFicheBody() {
+  if (Reader.owner() === 'fiches') Reader.stop();
   const body = $('#fbody');
   body.innerHTML = '';
   const d = fState.deck;
   if (!d.length) body.append(h('<div class="empty">Aucune fiche ne correspond à cette recherche.</div>'));
   else if (fState.mode === 'list') body.append(h(ficheListHTML(d)));
-  else renderFicheCard(body);
+  else showFicheCard(body, fState.i);
 }
 
 function goFiche(k) {
@@ -76,6 +119,7 @@ VIEWS.fiches = (main, arg) => {
       <div class="filters">
         ${chapterChips(fState.ch)}
         <div class="row"><div class="chips" role="group" aria-label="Affichage"><button class="chip" data-mode="cards" aria-pressed="${fState.mode === 'cards'}">Cartes</button><button class="chip" data-mode="list" aria-pressed="${fState.mode === 'list'}">Liste complète</button><button class="chip" id="shuffle" aria-pressed="${fState.shuffled}">Mélanger</button></div></div>
+        <div class="row">${listenGroup('fiches', 'Écouter')}</div>
         <input type="search" id="fsearch" placeholder="Chercher un terme : support, entropie, dendrogramme…" aria-label="Chercher dans les fiches" value="${fState.search.replace(/"/g, '&quot;')}">
       </div>
       <div id="fbody"></div></div>`);
@@ -105,6 +149,7 @@ VIEWS.fiches = (main, arg) => {
       buildFicheDeck();
       renderFicheBody();
     };
+    bindListen(v, 'fiches', listenFiches);
     renderFicheBody();
   };
   if (!fState.deck.length && !fState.search) buildFicheDeck();
