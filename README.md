@@ -2,6 +2,8 @@
 
 Site statique de révision : fiches, questions de cours (QCM + réponses rédigées), méthodes pas à pas, exercices type devoir et examens blancs notés sur 20.
 
+L’accueil propose un **programme de rattrapage en 10 séances** (`js/data/plan.js`) : chaque séance liste ses tâches, qui se cochent toutes seules. Le devoir de la session normale 2025-2026 est repris à l’identique, avec corrigé (`js/data/annale-2526.js`), en exercices et en simulation de 2 h.
+
 ## Mettre en ligne avec GitHub Pages
 1. Créer un dépôt public sur GitHub (ex. `revision-fouille`).
 2. Y déposer tous les fichiers du dossier, avec les dossiers `css/` et `js/` (bouton **Add file → Upload files**).

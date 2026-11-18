@@ -4,7 +4,19 @@ VIEWS.exercices = (main) => {
   main.append(
     h(`<div class="view">
     <div class="stack"><span class="eyebrow">Comme au devoir</span><h1>Exercices</h1><p class="lead">Réponds sur papier ou dans les cases, clique sur « Vérifier », puis lis la correction détaillée. Les fractions (3/7), décimaux (0,43) et pourcentages (43 %) sont acceptés.</p></div>
-    ${chapterSections(EXOS, (e) => `<a class="mode" href="#exercice-${e.id}"><span class="k">${e.tag}${best[e.id] != null ? ' · meilleur : ' + fmt(best[e.id], 1) + '/20' : ''}</span><b>${e.title}</b><span class="muted">Méthode associée : ${(TUTOS.find((t) => t.id === e.tuto) || {}).title || ''}</span></a>`)}
+    <section class="stack"><h2>Ton devoir de la session normale (2025-2026)</h2><p class="muted">L’énoncé à l’identique, partie par partie, avec un corrigé détaillé. Pour le refaire en 2 h : <a href="#examen-N25">simulation chronométrée</a>.</p><div class="grid g2">${EXOS.filter(
+      (e) => e.annale
+    )
+      .map(
+        (e) =>
+          `<a class="mode" style="${chStyle(e.ch)}" href="#exercice-${e.id}"><span class="k">${e.tag}${best[e.id] != null ? ' · meilleur : ' + fmt(best[e.id], 1) + '/20' : ''}</span><b>${e.title}</b><span class="muted">${chName(e.ch)}</span></a>`
+      )
+      .join('')}</div></section>
+    ${chapterSections(
+      EXOS.filter((e) => !e.annale),
+      (e) =>
+        `<a class="mode" href="#exercice-${e.id}"><span class="k">${e.tag}${best[e.id] != null ? ' · meilleur : ' + fmt(best[e.id], 1) + '/20' : ''}</span><b>${e.title}</b><span class="muted">Méthode associée : ${(TUTOS.find((t) => t.id === e.tuto) || {}).title || ''}</span></a>`
+    )}
   </div>`)
   );
 };

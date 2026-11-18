@@ -43,7 +43,11 @@ function refreshQuestions() {
 }
 
 VIEWS.questions = (main, arg) => {
-  if (arg) {
+  if (arg === 'rev') {
+    qState.ch = 'all';
+    qState.mode = 'rev';
+    qState.deck = null;
+  } else if (arg) {
     qState.ch = arg;
     qState.mode = 'mix';
     qState.deck = null;

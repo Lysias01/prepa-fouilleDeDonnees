@@ -13,7 +13,9 @@ const store = {
     examDur: 120,
     examDraft: null,
     rate: 1,
-    autoRead: false
+    autoRead: false,
+    checks: {},
+    activeSeance: null
   },
   load() {
     try {
